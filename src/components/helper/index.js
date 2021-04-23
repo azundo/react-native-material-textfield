@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
-import { View, Animated } from 'react-native';
+import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+import { View, Animated, Text } from "react-native";
 
-import styles from './styles';
+import styles from "./styles";
 
 export default class Helper extends PureComponent {
   static defaultProps = {
@@ -10,7 +10,7 @@ export default class Helper extends PureComponent {
   };
 
   static propTypes = {
-    style: Animated.Text.propTypes.style,
+    style: Text.propTypes.style,
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
       PropTypes.node,
