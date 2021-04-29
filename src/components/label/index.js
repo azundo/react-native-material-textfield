@@ -48,9 +48,10 @@ export default class Label extends PureComponent {
     };
   }
 
-  componentWillReceiveProps(props) {
-    let { focus, input } = this.state;
-    let { active, focused, errored, animationDuration } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    let { focus, input } = prevState;
+    let { active, focused, errored, animationDuration } = prevProps;
+    let props = this.props;
 
     if ((focused ^ props.focused) || (active ^ props.active)) {
       Animated

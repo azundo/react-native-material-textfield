@@ -42,9 +42,10 @@ export default class Affix extends PureComponent {
     };
   }
 
-  componentWillReceiveProps(props) {
-    let { opacity } = this.state;
-    let { active, focused, animationDuration } = this.props;
+  componentDidUpdate(prevProps, prevState) {
+    let { opacity } = prevState;
+    let { active, focused, animationDuration } = prevProps;
+    let props = this.props;
 
     if ((focused ^ props.focused) || (active ^ props.active)) {
       Animated
