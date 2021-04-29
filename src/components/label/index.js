@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
-import { Animated, Text } from 'react-native';
+import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+import { Animated } from "react-native";
 
 export default class Label extends PureComponent {
   static defaultProps = {
@@ -29,7 +29,7 @@ export default class Label extends PureComponent {
 
     animationDuration: PropTypes.number.isRequired,
 
-    style: Text.propTypes.style,
+    style: PropTypes.object,
 
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -43,8 +43,8 @@ export default class Label extends PureComponent {
     let { active, focused, errored } = this.props;
 
     this.state = {
-      input: new Animated.Value((active || focused)? 1 : 0),
-      focus: new Animated.Value(errored? -1 : (focused? 1 : 0)),
+      input: new Animated.Value(active || focused ? 1 : 0),
+      focus: new Animated.Value(errored ? -1 : focused ? 1 : 0),
     };
   }
 
@@ -53,24 +53,20 @@ export default class Label extends PureComponent {
     let { active, focused, errored, animationDuration } = prevProps;
     let props = this.props;
 
-    if ((focused ^ props.focused) || (active ^ props.active)) {
-      Animated
-        .timing(input, {
-          toValue: (props.active || props.focused)? 1 : 0,
-          duration: animationDuration,
-          useNativeDriver: false,
-        })
-        .start();
+    if (focused ^ props.focused || active ^ props.active) {
+      Animated.timing(input, {
+        toValue: props.active || props.focused ? 1 : 0,
+        duration: animationDuration,
+        useNativeDriver: false,
+      }).start();
     }
 
-    if ((focused ^ props.focused) || (errored ^ props.errored)) {
-      Animated
-        .timing(focus, {
-          toValue: props.errored? -1 : (props.focused? 1 : 0),
-          duration: animationDuration,
-          useNativeDriver: false,
-        })
-        .start();
+    if (focused ^ props.focused || errored ^ props.errored) {
+      Animated.timing(focus, {
+        toValue: props.errored ? -1 : props.focused ? 1 : 0,
+        duration: animationDuration,
+        useNativeDriver: false,
+      }).start();
     }
   }
 
@@ -90,12 +86,12 @@ export default class Label extends PureComponent {
       ...props
     } = this.props;
 
-    let color = restricted?
-      errorColor:
-      focus.interpolate({
-        inputRange: [-1, 0, 1],
-        outputRange: [errorColor, baseColor, tintColor],
-      });
+    let color = restricted
+      ? errorColor
+      : focus.interpolate({
+          inputRange: [-1, 0, 1],
+          outputRange: [errorColor, baseColor, tintColor],
+        });
 
     let top = input.interpolate({
       inputRange: [0, 1],
@@ -115,7 +111,7 @@ export default class Label extends PureComponent {
     };
 
     let containerStyle = {
-      position: 'absolute',
+      position: "absolute",
       top,
     };
 

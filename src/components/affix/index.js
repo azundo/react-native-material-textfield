@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
-import { Animated, Text } from 'react-native';
+import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
+import { Animated } from "react-native";
 
-import styles from './styles';
+import styles from "./styles";
 
 export default class Affix extends PureComponent {
   static defaultProps = {
@@ -18,13 +18,13 @@ export default class Affix extends PureComponent {
     active: PropTypes.bool,
     focused: PropTypes.bool,
 
-    type: PropTypes.oneOf(['prefix', 'suffix']).isRequired,
+    type: PropTypes.oneOf(["prefix", "suffix"]).isRequired,
 
     fontSize: PropTypes.number.isRequired,
     baseColor: PropTypes.string.isRequired,
     animationDuration: PropTypes.number.isRequired,
 
-    style: Text.propTypes.style,
+    style: PropTypes.object,
 
     children: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.node),
@@ -38,7 +38,7 @@ export default class Affix extends PureComponent {
     let { active, focused } = this.props;
 
     this.state = {
-      opacity: new Animated.Value((active || focused)? 1 : 0),
+      opacity: new Animated.Value(active || focused ? 1 : 0),
     };
   }
 
@@ -47,14 +47,12 @@ export default class Affix extends PureComponent {
     let { active, focused, animationDuration } = prevProps;
     let props = this.props;
 
-    if ((focused ^ props.focused) || (active ^ props.active)) {
-      Animated
-        .timing(opacity, {
-          toValue: (props.active || props.focused)? 1 : 0,
-          duration: animationDuration,
-          useNativeDriver: true,
-        })
-        .start();
+    if (focused ^ props.focused || active ^ props.active) {
+      Animated.timing(opacity, {
+        toValue: props.active || props.focused ? 1 : 0,
+        duration: animationDuration,
+        useNativeDriver: true,
+      }).start();
     }
   }
 
@@ -73,14 +71,14 @@ export default class Affix extends PureComponent {
     };
 
     switch (type) {
-      case 'prefix':
+      case "prefix":
         containerStyle.paddingRight = 8;
-        textStyle.textAlign = 'left';
+        textStyle.textAlign = "left";
         break;
 
-      case 'suffix':
+      case "suffix":
         containerStyle.paddingLeft = 8;
-        textStyle.textAlign = 'right';
+        textStyle.textAlign = "right";
         break;
     }
 
